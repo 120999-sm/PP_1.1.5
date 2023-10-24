@@ -22,18 +22,15 @@ public class Util {
     private static final String USERNAME = "root";
     private static final String PASSWORD = "root1";
 
-
     public static Connection getConnected() {
-
         Connection connection = null;
-
         try {
             connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
             System.out.println("Database connected!");
         } catch (SQLException e) {
             System.out.println("Database not connected");
         } finally {
-            return connection;
+            return connection;//todo ..нет, finally не для этого. Return - вынести из блока try/catch/finally
         }
     }
 
@@ -48,15 +45,11 @@ public class Util {
                 settings.put(Environment.USER, USERNAME);
                 settings.put(Environment.PASS, PASSWORD);
                 settings.put(Environment.DIALECT, "org.hibernate.dialect.MySQL5Dialect");
-
                 settings.put(Environment.SHOW_SQL, "true");
-
                 settings.put(Environment.CURRENT_SESSION_CONTEXT_CLASS, "thread");
-
                 settings.put(Environment.HBM2DDL_AUTO, "create-drop");
 
                 configuration.setProperties(settings);
-
                 configuration.addAnnotatedClass(User.class);
 
                 ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
@@ -66,9 +59,10 @@ public class Util {
                 System.out.println("Database connected!");
             } catch (Exception e) {
                 System.out.println("Database dont connected");
+                //todo: после того, как сказали "Database dont connected",
+                //      нужно уронить приложение.. уже все плохо. ->  throw new RuntimeException(), например
             }
         }
         return sessionFactory;
     }
-
 }

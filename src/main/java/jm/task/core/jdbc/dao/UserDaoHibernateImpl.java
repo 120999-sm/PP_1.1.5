@@ -6,24 +6,27 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+
 import java.util.ArrayList;
 import java.util.List;
 
-
-
 public class UserDaoHibernateImpl implements UserDao {
+
     private final SessionFactory sessionFactory;
+
     private final String SQL_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS users (id INT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(45), last_name VARCHAR(45), age INT)";
     private final String SQL_DROP_TABLE = "DROP TABLE IF EXISTS users";
     private final String SQL_CLEAN_TABLE = "TRUNCATE TABLE users";
+
     public UserDaoHibernateImpl() {
         sessionFactory = Util.getConnectedHibernate();
     }
 
+    //todo codeStyle.. просьба изучить hotKeys, для выравнивания кода и удаления лишних imports
 
     @Override
     public void createUsersTable() {
-        Session session = sessionFactory.openSession();
+        Session session = sessionFactory.openSession();//todo: не грамотная реализация - используем try with resources
         Transaction transaction = session.beginTransaction();
         try {
             session.createNativeQuery(SQL_CREATE_TABLE).executeUpdate();
@@ -31,7 +34,7 @@ public class UserDaoHibernateImpl implements UserDao {
             System.out.println("Таблица создана");
         } catch (HibernateException e) {
             System.out.println("При создании таблицы призошла ошибка: " + e.getMessage());
-            if (transaction != null) {
+            if (transaction != null) {//todo: transaction берется от session: session.beginTransaction(); Если transaction закрывается, как ресурс - необходимость в действии отпадает
                 transaction.rollback();
             }
         } finally {
@@ -82,7 +85,7 @@ public class UserDaoHibernateImpl implements UserDao {
         try {
             session.delete(session.get(User.class, id));
             transaction.commit();
-            System.out.println("User с id = " + id +  " удален");
+            System.out.println("User с id = " + id + " удален");
         } catch (HibernateException e) {
             System.out.println("При удалении пользователя с id = " + id + " произошла ошибка: " + e.getMessage());
             if (transaction != null) {
@@ -101,7 +104,7 @@ public class UserDaoHibernateImpl implements UserDao {
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
-            list = session.createCriteria(User.class).list();
+            list = session.createCriteria(User.class).list();//todo deprecated - переделываем
             transaction.commit();
         } catch (Exception e) {
             System.out.println("При получении всех пользователей произошла ошибка: " + e.getMessage());
@@ -112,8 +115,8 @@ public class UserDaoHibernateImpl implements UserDao {
             if (session != null)
                 session.close();
         }
-        for (User user : list ){
-            System.out.println(user.toString());
+        for (User user : list) {
+            System.out.println(user.toString());//todo стыдно.. коллега - переделываем через stream_api
         }
         return list;
     }

@@ -8,13 +8,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
+
     private final Connection connection;
+
     private final String SQL_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS users (id INT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(45), last_name VARCHAR(45), age INT)";
     private final String SQL_DROP_TABLE = "DROP TABLE IF EXISTS users";
     private final String SQL_SAVE_USER = "INSERT INTO users (name, last_name, age) VALUES (?, ?, ?)";
     private final String SQL_REMOVE_USER_ID = "DELETE FROM users WHERE id = ?";
-    final String SQL_GET_ALL_USERS= "SELECT * FROM users";
-    final String SQL_CLEAN_TABLE = "TRUNCATE TABLE users";
+    private final String SQL_GET_ALL_USERS= "SELECT * FROM users";
+    private final String SQL_CLEAN_TABLE = "TRUNCATE TABLE users";
 
     public UserDaoJDBCImpl() {
         connection = Util.getConnected();
