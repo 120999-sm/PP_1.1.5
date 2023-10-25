@@ -9,9 +9,7 @@ import java.sql.SQLException;
 public class Main {
     public static void main(String[] args) throws SQLException {
         Util.getConnectedHibernate();
-
         UserDao userDao = new UserDaoHibernateImpl();
-
         userDao.createUsersTable();
 
         userDao.saveUser("Name1", "LastName1", (byte) 20);

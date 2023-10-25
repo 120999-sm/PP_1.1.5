@@ -54,10 +54,7 @@ public class Util {
                 sessionFactory = configuration.buildSessionFactory(serviceRegistry);
                 System.out.println("Database connected!");
             } catch (Exception e) {
-                System.out.println("Database dont connected");
-                throw new RuntimeException();
-                //todo: после того, как сказали "Database dont connected",
-                //      нужно уронить приложение.. уже все плохо. ->  throw new RuntimeException(), например
+                throw new RuntimeException("Database dont connected" + e.getMessage());
             }
         }
         return sessionFactory;
