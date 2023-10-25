@@ -1,19 +1,16 @@
 package jm.task.core.jdbc.util;
 
+import jm.task.core.jdbc.model.User;
+import org.hibernate.SessionFactory;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.cfg.Environment;
+import org.hibernate.service.ServiceRegistry;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
-import jm.task.core.jdbc.model.User;
-import jm.task.core.jdbc.util.Util;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.cfg.Environment;
-import org.hibernate.query.Query;
-import org.hibernate.service.ServiceRegistry;
 
 public class Util {
 
@@ -29,9 +26,8 @@ public class Util {
             System.out.println("Database connected!");
         } catch (SQLException e) {
             System.out.println("Database not connected");
-        } finally {
-            return connection;//todo ..нет, finally не для этого. Return - вынести из блока try/catch/finally
         }
+        return connection;
     }
 
     public static SessionFactory getConnectedHibernate() {
@@ -59,6 +55,7 @@ public class Util {
                 System.out.println("Database connected!");
             } catch (Exception e) {
                 System.out.println("Database dont connected");
+                throw new RuntimeException();
                 //todo: после того, как сказали "Database dont connected",
                 //      нужно уронить приложение.. уже все плохо. ->  throw new RuntimeException(), например
             }
